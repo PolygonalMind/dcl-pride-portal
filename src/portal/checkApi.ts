@@ -2,7 +2,7 @@
 //with limit 'https://events.decentraland.org/api/events/?limit=10'
 //without limit 'https://events.decentraland.org/api/events/'
 
-import { Company_Event_01 } from "./preSetEventData"
+import { Companies_Events } from "./preSetEventData"
 /**
  *  Gets the events from the api
  * @param url 
@@ -23,7 +23,9 @@ export async function getEvents(url: string) {
     //! test if events is empty
     if (!events[0]) {
       events = []
-      events.push(Company_Event_01)
+      Companies_Events.forEach(event => {
+        events.push(event)
+      });
       return events
     }
 
@@ -31,8 +33,9 @@ export async function getEvents(url: string) {
   } catch (e) {
     log('error getting event data ', e)
     events = []
-    events.push(Company_Event_01)
-
+    Companies_Events.forEach(event => {
+      events.push(event)
+    });
   }
 }
 
