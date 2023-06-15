@@ -181,7 +181,7 @@ export class PortalUI {
     setCloseButtonOnClick() {
         this.button_close.onClick = new OnPointerDown(() => {
             this.show(false);
-            if (this.close_callback) this.cancel_callback()
+            if (this.close_callback) this.close_callback()
         })
     }
 
