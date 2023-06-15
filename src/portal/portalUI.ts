@@ -51,7 +51,7 @@ export class PortalUI {
             this.inputF = Input.instance.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, false, () => {
                 log("Close callback not set")
                 self.show(false);
-                if (self.accept_callback) self.close_callback()
+                if (self.close_callback) self.close_callback()
             })
         }
     }
