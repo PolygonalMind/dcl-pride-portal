@@ -7,12 +7,19 @@ export class PortalUI {
 
     buttons_container: UIContainerRect
     button_accept: UIImage
+    button_close: UIImage
     button_cancel: UIImage
 
     accept_callback: Function
+    close_callback: Function
     cancel_callback: Function
 
     inputE: any
+    inputF: any
+
+
+    tipBg: UIContainerRect
+    tipText: UIText
 
     private static instanceRef: PortalUI
 
@@ -32,7 +39,19 @@ export class PortalUI {
             this.inputE = Input.instance.subscribe("BUTTON_DOWN", ActionButton.PRIMARY, false, () => {
                 log("Accept callback not set")
                 self.show(false);
-                (self.accept_callback) ? self.accept_callback() : log("Accept callback not set")
+                if (self.accept_callback) self.accept_callback()
+            })
+        }
+    }
+
+    setFInput(bEnable: boolean) {
+        var self = this
+        if (!bEnable) this.inputF()
+        else {
+            this.inputF = Input.instance.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, false, () => {
+                log("Close callback not set")
+                self.show(false);
+                if (self.accept_callback) self.close_callback()
             })
         }
     }
@@ -75,7 +94,7 @@ export class PortalUI {
         this.button_accept.sourceHeight = 80
         this.button_accept.width = 215 * 0.7
         this.button_accept.height = 80 * 0.7
-        this.button_accept.positionX = 0
+        this.button_accept.positionX = -80
         this.button_accept.positionY = -80
         this.button_accept.visible = true
         this.button_accept.vAlign = "center"
@@ -97,7 +116,45 @@ export class PortalUI {
         this.button_cancel.isPointerBlocker = true
 
         this.setCancelButtonOnClick()
+
+        this.button_close = new UIImage(this.buttons_container, new Texture("src/portal/teleportui/close.png"))
+        this.button_close.sourceWidth = 215
+        this.button_close.sourceHeight = 80
+        this.button_close.width = 215 * 0.7
+        this.button_close.height = 80 * 0.7
+        this.button_close.positionX = 80
+        this.button_close.positionY = -80
+        this.button_close.visible = true
+        this.button_close.vAlign = "center"
+        this.button_close.hAlign = "center"
+        this.button_close.isPointerBlocker = true
+
+        this.setCloseButtonOnClick()
+
+        this.tipBg = new UIContainerRect(this.canvas)
+        this.tipBg.width = 410
+        this.tipBg.height = 40
+        this.tipBg.positionX = 0
+        this.tipBg.positionY = 60
+        this.tipBg.visible = true
+        this.tipBg.vAlign = "top"
+        this.tipBg.hAlign = "center"
+        this.tipBg.isPointerBlocker = false
+        this.tipBg.color = Color4.Black()
+        this.tipBg.opacity = 0.8
+
+        this.tipText = new UIText(this.tipBg)
+        this.tipText.value = "<b>Press right-click on your mouse to see the cursor</b>"
+        this.tipText.width = 420
+        this.tipText.height = 50
+        this.tipText.fontSize = 14
+        this.tipText.color = Color4.White()
+        this.tipText.hTextAlign = "center"
+        this.tipText.vTextAlign = "center"
+        this.tipText.textWrapping = true
+
     }
+
 
     /**
      * This function sets the onClick event for a button and subscribes to a button down event to hide a
@@ -106,7 +163,7 @@ export class PortalUI {
     setAcceptButtonOnClick() {
         this.button_accept.onClick = new OnPointerDown(() => {
             this.show(false);
-            (this.accept_callback) ? this.accept_callback() : log("Accept callback not set")
+            if (this.accept_callback) this.accept_callback()
         })
     }
 
@@ -117,7 +174,14 @@ export class PortalUI {
     setCancelButtonOnClick() {
         this.button_cancel.onClick = new OnPointerDown(() => {
             this.show(false);
-            (this.cancel_callback) ? this.cancel_callback() : log("Cancel callback not set")
+            if (this.cancel_callback) this.cancel_callback()
+        })
+    }
+
+    setCloseButtonOnClick() {
+        this.button_close.onClick = new OnPointerDown(() => {
+            this.show(false);
+            if (this.close_callback) this.cancel_callback()
         })
     }
 
@@ -133,11 +197,24 @@ export class PortalUI {
         }
     }
 
+    setCloseButtonCallback(callback: () => void) {
+        this.close_callback = () => {
+            callback()
+        }
+    }
+
     show(bShow: boolean) {
-        if (bShow == false) this.setEInput(false)
-        if (bShow == true) this.setEInput(true)
+        if (bShow == false) {
+            this.setEInput(false)
+            this.setFInput(false)
+        }
+        if (bShow == true) {
+            this.setEInput(true)
+            this.setFInput(true)
+        }
         this.background_container.visible = bShow
         this.buttons_container.visible = bShow
+        this.tipBg.visible = bShow
     }
 
     showTeleportToLand(callback: () => void) {

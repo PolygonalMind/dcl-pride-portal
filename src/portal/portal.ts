@@ -26,6 +26,7 @@ export class Portal {
 
     portalUI: PortalUI
 
+
     /**
      * Creates a portal to the event
      * @param event The event data
@@ -43,6 +44,7 @@ export class Portal {
         this.bActive = true;
         this.portalUI = PortalUI.instance()
     }
+
 
 
     /**
@@ -134,7 +136,6 @@ export class Portal {
                 //Set event to default animation
             }
         }
-
 
     }
 
