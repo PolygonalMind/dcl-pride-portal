@@ -161,27 +161,26 @@ export class PortalUI {
      * dialog and execute an accept callback function.
      */
     setAcceptButtonOnClick() {
+        var self = this
         this.button_accept.onClick = new OnPointerDown(() => {
-            this.show(false);
-            if (this.accept_callback) this.accept_callback()
+            self.show(false);
+            if (self.accept_callback) self.accept_callback()
         })
     }
 
-    /**
-     * This function sets the onClick event for a cancel button and executes a callback function if it
-     * exists.
-     */
     setCancelButtonOnClick() {
+        var self = this
         this.button_cancel.onClick = new OnPointerDown(() => {
-            this.show(false);
-            if (this.cancel_callback) this.cancel_callback()
+            self.show(false);
+            if (this.cancel_callback) self.cancel_callback()
         })
     }
 
     setCloseButtonOnClick() {
+        var self = this
         this.button_close.onClick = new OnPointerDown(() => {
-            this.show(false);
-            if (this.close_callback) this.close_callback()
+            self.show(false);
+            if (self.close_callback) self.close_callback()
         })
     }
 
